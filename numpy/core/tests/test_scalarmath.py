@@ -29,6 +29,8 @@ class TestTypes:
             a = atype(1)
             assert_(a == 1, "error with %r: got %r" % (atype, a))
 
+
+
     def test_type_add(self):
         # list of types
         for k, atype in enumerate(types):
