@@ -795,3 +795,24 @@ npy_rshift@u@@c@(npy_@u@@type@ a, npy_@u@@type@ b)
 }
 /**end repeat1**/
 /**end repeat**/
+
+
+/**begin repeat
+ *
+ * #type = ubyte, ushort, uint, ulong, ulonglong#
+ * #c    = ,,,ll,ll#
+ */
+NPY_INPLACE npy_@type@
+npy_@type@_countbits(npy_@type@ a)
+{
+#ifdef __GNUC__
+    return __builtin_popcount@c@(a);
+#else
+    a  = a - ((a >> 1) & 0x55555555);                 // add pairs of bits
+    a  = (a & 0x33333333) + ((a >> 2) & 0x33333333);  // quads
+    a  = (a + (a >> 4)) & 0x0F0F0F0F;                 // groups of 8
+    return (a * 0x01010101) >> 24;                    // horizontal sum of bytes
+#endif
+}
+
+/**end repeat**/
