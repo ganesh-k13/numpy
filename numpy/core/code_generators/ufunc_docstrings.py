@@ -4232,3 +4232,35 @@ add_newdoc('numpy.core.umath', 'lcm',
     array([ 0, 20, 20, 60, 20, 20])
 
     """)
+
+add_newdoc('numpy.core.umath', 'countbits',
+    """
+    Computes the number of 1-bits in ``x``.
+
+    Parameters
+    ----------
+    x : array_like, unsigned int
+        Input array.
+    $PARAMS
+
+    Returns
+    -------
+    y : ndarray
+        The corresponding number of 1-bits in the input.
+        $OUT_SCALAR_1
+
+    References
+    ----------
+    .. [1] https://stackoverflow.com/a/109025/5671364
+
+    .. [2] Wikipedia, "Hamming weight",
+           https://en.wikipedia.org/wiki/Hamming_weight
+
+    Examples
+    --------
+    >>> np.countbits(np.uint64(1023))
+    10
+    >>> np.countbits(np.arange(10, dtype=np.uint32))
+    array([0, 1, 1, 2, 1, 2, 2, 3, 1, 2], dtype=uint32)
+
+    """)
