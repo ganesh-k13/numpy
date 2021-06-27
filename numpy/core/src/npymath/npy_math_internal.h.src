@@ -59,7 +59,7 @@ static const npy_uint8  S[]   = {1, 2, 4, 8, 16};
 static const npy_uint8  B8[]  = {0x55,               0x33,               0x0F,               0x01};
 static const npy_uint16 B16[] = {0x5555,             0x3333,             0x0F0F,             0x0101};
 static const npy_uint32 B32[] = {0x55555555,         0x33333333,         0x0F0F0F0F,         0x01010101};
-static const npy_uint64 B64[] = {0x5555555555555555, 0x3333333333333333, 0x00F0F0F0FF0F0F0F, 0x0101010101010101};
+static const npy_uint64 B64[] = {0x5555555555555555, 0x3333333333333333, 0x0F0F0F0F0F0F0F0F, 0x0101010101010101};
 
 /*
  *****************************************************************************
