@@ -955,9 +955,9 @@ defdict = {
           TD(ints),
           TD('O', f='npy_ObjectLCM'),
           ),
-'countbits' :
+'bit_count' :
     Ufunc(1, 1, None,
-          docstrings.get('numpy.core.umath.countbits'),
+          docstrings.get('numpy.core.umath.bit_count'),
           None,
           TD(uints),
           ),
