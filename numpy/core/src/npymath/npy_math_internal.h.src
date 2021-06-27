@@ -807,7 +807,7 @@ npy_rshift@u@@c@(npy_@u@@type@ a, npy_@u@@type@ b)
  *
  * #type  = ubyte, ushort, uint, ulong, ulonglong#
  * #STYPE = BYTE,  SHORT,  INT,  LONG,  LONGLONG#
- * #c     = ,      ,       ,     ll,    ll#
+ * #c     = ,      ,       ,     l,     ll#
  */
 #undef MAGIC_ARRAY
 #if 0
@@ -822,6 +822,9 @@ npy_rshift@u@@c@(npy_@u@@type@ a, npy_@u@@type@ b)
 NPY_INPLACE npy_@type@
 npy_@type@_bit_count(npy_@type@ a)
 {
+#if (defined(__clang__) || defined(__GNUC__))
+    return __builtin_popcount@c@(a);
+#endif
     a = a - ((a >> 1) & MAGIC_ARRAY[0]);
     a = ((a & MAGIC_ARRAY[1])) + ((a >> 2) & MAGIC_ARRAY[1]);
     return (((a + (a >> 4)) & MAGIC_ARRAY[2]) * MAGIC_ARRAY[3]) >> (NPY_BITSOF_@STYPE@ - 1)*8;
