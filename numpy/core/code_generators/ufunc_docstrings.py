@@ -4235,7 +4235,7 @@ add_newdoc('numpy.core.umath', 'lcm',
 
 add_newdoc('numpy.core.umath', 'countbits',
     """
-    Computes the number of 1-bits in ``x``.
+    Computes the number of 1-bits in ``x``. Analogous to the builtin `int.bit_count`.
 
     Parameters
     ----------
