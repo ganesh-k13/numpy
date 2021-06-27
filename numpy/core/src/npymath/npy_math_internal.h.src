@@ -820,7 +820,7 @@ npy_rshift@u@@c@(npy_@u@@type@ a, npy_@u@@type@ b)
 #endif
 
 NPY_INPLACE npy_@type@
-npy_@type@_countbits(npy_@type@ a)
+npy_@type@_bit_count(npy_@type@ a)
 {
     a = a - ((a >> 1) & MAGIC_ARRAY[0]);
     a = ((a & MAGIC_ARRAY[1])) + ((a >> 2) & MAGIC_ARRAY[1]);

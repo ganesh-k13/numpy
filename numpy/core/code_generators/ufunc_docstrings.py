@@ -4233,7 +4233,7 @@ add_newdoc('numpy.core.umath', 'lcm',
 
     """)
 
-add_newdoc('numpy.core.umath', 'countbits',
+add_newdoc('numpy.core.umath', 'bit_count',
     """
     Computes the number of 1-bits in ``x``. Analogous to the builtin `int.bit_count`.
 
@@ -4258,9 +4258,9 @@ add_newdoc('numpy.core.umath', 'countbits',
 
     Examples
     --------
-    >>> np.countbits(np.uint64(1023))
+    >>> np.bit_count(np.uint64(1023))
     10
-    >>> np.countbits(np.arange(10, dtype=np.uint32))
+    >>> np.bit_count(np.arange(10, dtype=np.uint32))
     array([0, 1, 1, 2, 1, 2, 2, 3, 1, 2], dtype=uint32)
 
     """)
