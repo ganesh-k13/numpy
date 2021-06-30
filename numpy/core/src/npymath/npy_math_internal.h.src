@@ -825,3 +825,16 @@ npy_popcountu@c@(npy_@type@ a)
     return (a * MAGIC_ARRAY[3]) >> ((NPY_SIZEOF_@STYPE@ - 1) * CHAR_BIT);
 }
 /**end repeat**/
+
+/**begin repeat
+ *
+ * #type = byte, short, int, long, longlong#
+ * #c    = hh,   h,     ,    l,    ll#
+ */
+NPY_INPLACE npy_@type@
+npy_popcount@c@(npy_@type@ a)
+{
+    /* Return popcount of abs(a) */
+    return npy_popcountu@c@(a < 0 ? -a : a);
+}
+/**end repeat**/

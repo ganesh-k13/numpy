@@ -171,11 +171,10 @@ NPY_NO_EXPORT void
 @S@@TYPE@_@kind@(char **args, npy_intp const *dimensions, npy_intp const *steps, void *NPY_UNUSED(func));
 /**end repeat2**/
 
-/**end repeat1**/
-
 NPY_NO_EXPORT void
-U@TYPE@_bit_count(char **args, npy_intp const *dimensions, npy_intp const *steps, void *NPY_UNUSED(func));
+@S@@TYPE@_bit_count(char **args, npy_intp const *dimensions, npy_intp const *steps, void *NPY_UNUSED(func));
 
+/**end repeat1**/
 /**end repeat**/
 
 /*

@@ -959,7 +959,7 @@ defdict = {
     Ufunc(1, 1, None,
           docstrings.get('numpy.core.umath.bit_count'),
           None,
-          TD(uints),
+          TD(ints),
           ),
 'matmul' :
     Ufunc(2, 1, None,
