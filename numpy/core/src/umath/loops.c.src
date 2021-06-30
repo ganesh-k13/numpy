@@ -570,7 +570,6 @@ NPY_NO_EXPORT void
     UNARY_LOOP_FAST(@type@, @type@, *out = +in);
 }
 
-#if !@SIGNED@
 NPY_NO_EXPORT void
 @TYPE@_bit_count(char **args, npy_intp const *dimensions, npy_intp const *steps, void *NPY_UNUSED(func))
 {
@@ -579,7 +578,6 @@ NPY_NO_EXPORT void
         *((@type@ *)op1) = npy_popcount@c@(in1);
     }
 }
-#endif
 
 /**begin repeat1
  * #isa = , _avx2#
