@@ -111,6 +111,12 @@ NPY_INLINE static float __npy_nzerof(void)
 #define NPY_SQRT2l    1.414213562373095048801688724209698079L /* sqrt(2) */
 #define NPY_SQRT1_2l  0.707106781186547524400844362104849039L /* 1/sqrt(2) */
 
+/* Magic binary numbers used by popcount */
+static const npy_uint8  MAGIC8[]  = {0x55,               0x33,               0x0F,               0x01};
+static const npy_uint16 MAGIC16[] = {0x5555,             0x3333,             0x0F0F,             0x0101};
+static const npy_uint32 MAGIC32[] = {0x55555555,         0x33333333,         0x0F0F0F0F,         0x01010101};
+static const npy_uint64 MAGIC64[] = {0x5555555555555555, 0x3333333333333333, 0x0F0F0F0F0F0F0F0F, 0x0101010101010101};
+
 /*
  * Integer functions.
  */
@@ -149,6 +155,12 @@ NPY_INPLACE npy_long npy_rshiftl(npy_long a, npy_long b);
 NPY_INPLACE npy_long npy_lshiftl(npy_long a, npy_long b);
 NPY_INPLACE npy_longlong npy_rshiftll(npy_longlong a, npy_longlong b);
 NPY_INPLACE npy_longlong npy_lshiftll(npy_longlong a, npy_longlong b);
+
+NPY_INPLACE npy_ubyte npy_popcountuhh(npy_ubyte a);
+NPY_INPLACE npy_ushort npy_popcountuh(npy_ushort a);
+NPY_INPLACE npy_uint npy_popcountu(npy_uint a);
+NPY_INPLACE npy_ulong npy_popcountul(npy_ulong a);
+NPY_INPLACE npy_ulonglong npy_popcountull(npy_ulonglong a);
 
 /*
  * C99 double math funcs
