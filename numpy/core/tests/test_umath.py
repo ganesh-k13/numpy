@@ -1858,6 +1858,24 @@ class TestBitwiseUFuncs:
             btype = np.array([True], dtype=object)
             assert_(type(f.reduce(btype)) is bool, msg)
 
+    @pytest.mark.parametrize("input_dtype",
+        np.sctypes["int"] + np.sctypes["uint"])
+    def test_popcount(self, input_dtype):
+        bitsize = np.dtype(input_dtype).itemsize * 8
+        max_bits = bitsize if input_dtype in np.sctypes["int"] else bitsize + 1
+
+        for i in range(1, max_bits):
+            num = 2**i - 1
+            msg = f"bit_count for {num}"
+            assert i == np.bit_count(input_dtype(num)), msg
+
+        a = np.array([2**i-1 for i in range(1, max_bits)], dtype = input_dtype)
+        bit_count_a = np.bit_count(a)
+        expected = np.arange(1, max_bits, dtype = input_dtype)
+
+        msg = f"array bit_count for {input_dtype}"
+        assert all(bit_count_a == expected), msg
+
 
 class TestInt:
     def test_logical_not(self):
