@@ -55,12 +55,6 @@
  */
 #include "npy_math_private.h"
 
-static const npy_uint8  S[]   = {1, 2, 4, 8, 16};
-static const npy_uint8  B8[]  = {0x55,               0x33,               0x0F,               0x01};
-static const npy_uint16 B16[] = {0x5555,             0x3333,             0x0F0F,             0x0101};
-static const npy_uint32 B32[] = {0x55555555,         0x33333333,         0x0F0F0F0F,         0x01010101};
-static const npy_uint64 B64[] = {0x5555555555555555, 0x3333333333333333, 0x0F0F0F0F0F0F0F0F, 0x0101010101010101};
-
 /*
  *****************************************************************************
  **                     BASIC MATH FUNCTIONS                                **
@@ -807,7 +801,7 @@ npy_rshift@u@@c@(npy_@u@@type@ a, npy_@u@@type@ b)
  *
  * #type  = ubyte, ushort, uint, ulong, ulonglong#
  * #STYPE = BYTE,  SHORT,  INT,  LONG,  LONGLONG#
- * #c     = ,      ,       ,     l,     ll#
+ * #c     = hh,    h,      ,     l,     ll#
  */
 #undef MAGIC_ARRAY
 #if 0
@@ -815,19 +809,19 @@ npy_rshift@u@@c@(npy_@u@@type@ a, npy_@u@@type@ b)
  * #len = 8, 16, 32, 64#
  */
 #elif NPY_BITSOF_@STYPE@ == @len@
-    #define MAGIC_ARRAY B@len@
+    #define MAGIC_ARRAY MAGIC@len@
 /**end repeat1**/
 #endif
 
 NPY_INPLACE npy_@type@
-npy_@type@_bit_count(npy_@type@ a)
+npy_popcountu@c@(npy_@type@ a)
 {
-#if (defined(__clang__) || defined(__GNUC__))
+#if ((defined(__clang__) || defined(__GNUC__))) && NPY_BITSOF_@STYPE@ >= 32
     return __builtin_popcount@c@(a);
 #endif
     a = a - ((a >> 1) & MAGIC_ARRAY[0]);
     a = ((a & MAGIC_ARRAY[1])) + ((a >> 2) & MAGIC_ARRAY[1]);
-    return (((a + (a >> 4)) & MAGIC_ARRAY[2]) * MAGIC_ARRAY[3]) >> (NPY_BITSOF_@STYPE@ - 1)*8;
+    a = (a + (a >> 4)) & MAGIC_ARRAY[2];
+    return (a * MAGIC_ARRAY[3]) >> ((NPY_SIZEOF_@STYPE@ - 1) * CHAR_BIT);
 }
-
 /**end repeat**/
