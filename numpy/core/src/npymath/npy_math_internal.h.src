@@ -797,6 +797,7 @@ npy_rshift@u@@c@(npy_@u@@type@ a, npy_@u@@type@ b)
 /**end repeat**/
 
 
+#define __popcnt32 __popcnt
 /**begin repeat
  *
  * #type  = ubyte, ushort, uint, ulong, ulonglong#
@@ -804,12 +805,14 @@ npy_rshift@u@@c@(npy_@u@@type@ a, npy_@u@@type@ b)
  * #c     = hh,    h,      ,     l,     ll#
  */
 #undef MAGIC_ARRAY
+#undef WIN_POPCOUNT
 #if 0
 /**begin repeat1
  * #len = 8, 16, 32, 64#
  */
 #elif NPY_BITSOF_@STYPE@ == @len@
     #define MAGIC_ARRAY MAGIC@len@
+    #define WIN_POPCOUNT __popcnt@len@
 /**end repeat1**/
 #endif
 
@@ -818,6 +821,8 @@ npy_popcountu@c@(npy_@type@ a)
 {
 #if ((defined(__clang__) || defined(__GNUC__))) && NPY_BITSOF_@STYPE@ >= 32
     return __builtin_popcount@c@(a);
+#elif defined(_MSC_VER) && NPY_BITSOF_@STYPE@ >= 16
+    return WIN_POPCOUNT(a);
 #endif
 
     /* Counting bits set, in parallel
