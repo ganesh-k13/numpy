@@ -819,10 +819,20 @@ npy_popcountu@c@(npy_@type@ a)
 #if ((defined(__clang__) || defined(__GNUC__))) && NPY_BITSOF_@STYPE@ >= 32
     return __builtin_popcount@c@(a);
 #endif
-    a = a - ((a >> 1) & MAGIC_ARRAY[0]);
-    a = ((a & MAGIC_ARRAY[1])) + ((a >> 2) & MAGIC_ARRAY[1]);
-    a = (a + (a >> 4)) & MAGIC_ARRAY[2];
-    return (a * MAGIC_ARRAY[3]) >> ((NPY_SIZEOF_@STYPE@ - 1) * CHAR_BIT);
+
+    /* Counting bits set, in parallel
+     * Based on: http://graphics.stanford.edu/~seander/bithacks.html#CountBitsSetParallel
+     *
+     * Generic Algorithm for type T:
+     * v = v - ((v >> 1) & (T)~(T)0/3);
+     * v = (v & (T)~(T)0/15*3) + ((v >> 2) & (T)~(T)0/15*3);
+     * v = (v + (v >> 4)) & (T)~(T)0/255*15;
+     * c = (T)(v * ((T)~(T)0/255)) >> (sizeof(T) - 1) * CHAR_BIT;
+     */
+    a = a - ((a >> 1) & (npy_@type@) MAGIC_ARRAY[0]);
+    a = ((a & (npy_@type@) MAGIC_ARRAY[1])) + ((a >> 2) & (npy_@type@) MAGIC_ARRAY[1]);
+    a = (a + (a >> 4)) & (npy_@type@) MAGIC_ARRAY[2];
+    return (npy_@type@) (a * (npy_@type@) MAGIC_ARRAY[3]) >> ((NPY_SIZEOF_@STYPE@ - 1) * CHAR_BIT);
 }
 /**end repeat**/
 
