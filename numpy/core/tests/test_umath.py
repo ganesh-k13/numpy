@@ -1777,7 +1777,14 @@ class TestBool:
 
 class TestBitwiseUFuncs:
 
-    bitwise_types = [np.dtype(c) for c in '?' + 'bBhHiIlLqQ' + 'O']
+    _all_ints_bits = [
+        np.dtype(c).itemsize * 8 for c in  np.typecodes["AllInteger"]]
+    bitwise_types = [np.dtype(c) for c in '?' + np.typecodes["AllInteger"] + 'O']
+    bitwise_bits = [
+        2,  # boolean type
+        *_all_ints_bits,  # All integers
+        max(_all_ints_bits) + 1,  # Object_ type
+    ]
 
     def test_values(self):
         for dt in self.bitwise_types:
@@ -1858,22 +1865,19 @@ class TestBitwiseUFuncs:
             btype = np.array([True], dtype=object)
             assert_(type(f.reduce(btype)) is bool, msg)
 
-    @pytest.mark.parametrize("input_dtype_code", np.typecodes["AllInteger"] + "?")
-    def test_popcount(self, input_dtype_code):
-        input_dtype = np.dtype(input_dtype_code).type
-        bitsize = np.dtype(input_dtype_code).itemsize * 8
+    @pytest.mark.parametrize("input_dtype_obj, bitsize",
+            zip(bitwise_types, bitwise_bits))
+    def test_popcount(self, input_dtype_obj, bitsize):
+        input_dtype = input_dtype_obj.type
 
-        # For bool, we only need to check 0 and 1
-        max_bits = int(np.log2(bitsize)) if input_dtype != np.bool_ else 2
-
-        for i in range(1, max_bits):
+        for i in range(1, bitsize):
             num = 2**i - 1
             msg = f"bit_count for {num}"
             assert i == np.bit_count(input_dtype(num)), msg
 
-        a = np.array([2**i-1 for i in range(1, max_bits)], dtype = input_dtype)
+        a = np.array([2**i-1 for i in range(1, bitsize)], dtype = input_dtype)
         bit_count_a = np.bit_count(a)
-        expected = np.arange(1, max_bits, dtype = input_dtype)
+        expected = np.arange(1, bitsize, dtype = input_dtype)
 
         msg = f"array bit_count for {input_dtype}"
         assert all(bit_count_a == expected), msg
