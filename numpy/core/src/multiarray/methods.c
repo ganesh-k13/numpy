@@ -351,6 +351,12 @@ array_ptp(PyArrayObject *self, PyObject *args, PyObject *kwds)
     NPY_FORWARD_NDARRAY_METHOD("_ptp");
 }
 
+static PyObject *
+array_bit_count(PyArrayObject *self, PyObject *args, PyObject *kwds)
+{
+    NPY_FORWARD_NDARRAY_METHOD("_bit_count");
+}
+
 
 static PyObject *
 array_swapaxes(PyArrayObject *self, PyObject *args)
@@ -2917,5 +2923,8 @@ NPY_NO_EXPORT PyMethodDef array_methods[] = {
     {"view",
         (PyCFunction)array_view,
         METH_FASTCALL | METH_KEYWORDS, NULL},
+    {"bit_count",
+        (PyCFunction)array_bit_count,
+        METH_VARARGS | METH_KEYWORDS, NULL},
     {NULL, NULL, 0, NULL}           /* sentinel */
 };
