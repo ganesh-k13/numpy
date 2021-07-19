@@ -52,10 +52,6 @@ def _prod(a, axis=None, dtype=None, out=None, keepdims=False,
           initial=_NoValue, where=True):
     return umr_prod(a, axis, dtype, out, keepdims, initial, where)
 
-def _bit_count(a, out=None, where=True, casting='same_kind',
-          order='K', dtype=None, subok=True):
-    return umr_bit_count(a, dtype)
-
 def _any(a, axis=None, dtype=None, out=None, keepdims=False, *, where=True):
     # Parsing keyword arguments is currently fairly slow, so avoid it for now
     if where is True:
@@ -293,3 +289,8 @@ def _dump(self, file, protocol=2):
 
 def _dumps(self, protocol=2):
     return pickle.dumps(self, protocol=protocol)
+
+def _bit_count(a, out=None, *, where=True, casting='same_kind',
+          order='K', dtype=None, subok=True):
+    return umr_bit_count(a, out, where=where, casting=casting,
+            order=order, dtype=dtype, subok=subok)

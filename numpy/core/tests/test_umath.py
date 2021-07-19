@@ -1778,8 +1778,9 @@ class TestBool:
 class TestBitwiseUFuncs:
 
     _all_ints_bits = [
-        np.dtype(c).itemsize * 8 for c in  np.typecodes["AllInteger"]]
-    bitwise_types = [np.dtype(c) for c in '?' + np.typecodes["AllInteger"] + 'O']
+        np.dtype(c).itemsize * 8 for c in np.typecodes["AllInteger"]]
+    bitwise_types = [
+        np.dtype(c) for c in '?' + np.typecodes["AllInteger"] + 'O']
     bitwise_bits = [
         2,  # boolean type
         *_all_ints_bits,  # All integers

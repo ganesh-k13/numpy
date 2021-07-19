@@ -804,15 +804,13 @@ npy_rshift@u@@c@(npy_@u@@type@ a, npy_@u@@type@ b)
  * #STYPE = BYTE,  SHORT,  INT,  LONG,  LONGLONG#
  * #c     = hh,    h,      ,     l,     ll#
  */
-#undef MAGIC_ARRAY
-#undef WIN_POPCOUNT
+#undef TO_BITS_LEN
 #if 0
 /**begin repeat1
  * #len = 8, 16, 32, 64#
  */
 #elif NPY_BITSOF_@STYPE@ == @len@
-    #define MAGIC_ARRAY MAGIC@len@
-    #define WIN_POPCOUNT __popcnt@len@
+    #define TO_BITS_LEN(X) X##@len@
 /**end repeat1**/
 #endif
 
@@ -822,22 +820,22 @@ npy_popcountu@c@(npy_@type@ a)
 #if ((defined(__clang__) || defined(__GNUC__))) && NPY_BITSOF_@STYPE@ >= 32
     return __builtin_popcount@c@(a);
 #elif defined(_MSC_VER) && NPY_BITSOF_@STYPE@ >= 16
-    return WIN_POPCOUNT(a);
+    return TO_BITS_LEN(__popcnt)(a);
 #endif
 
     /* Counting bits set, in parallel
      * Based on: http://graphics.stanford.edu/~seander/bithacks.html#CountBitsSetParallel
      *
      * Generic Algorithm for type T:
-     * v = v - ((v >> 1) & (T)~(T)0/3);
-     * v = (v & (T)~(T)0/15*3) + ((v >> 2) & (T)~(T)0/15*3);
-     * v = (v + (v >> 4)) & (T)~(T)0/255*15;
-     * c = (T)(v * ((T)~(T)0/255)) >> (sizeof(T) - 1) * CHAR_BIT;
+     * a = a - ((a >> 1) & (T)~(T)0/3);
+     * a = (a & (T)~(T)0/15*3) + ((a >> 2) & (T)~(T)0/15*3);
+     * a = (a + (a >> 4)) & (T)~(T)0/255*15;
+     * c = (T)(a * ((T)~(T)0/255)) >> (sizeof(T) - 1) * CHAR_BIT;
      */
-    a = a - ((a >> 1) & (npy_@type@) MAGIC_ARRAY[0]);
-    a = ((a & (npy_@type@) MAGIC_ARRAY[1])) + ((a >> 2) & (npy_@type@) MAGIC_ARRAY[1]);
-    a = (a + (a >> 4)) & (npy_@type@) MAGIC_ARRAY[2];
-    return (npy_@type@) (a * (npy_@type@) MAGIC_ARRAY[3]) >> ((NPY_SIZEOF_@STYPE@ - 1) * CHAR_BIT);
+    a = a - ((a >> 1) & (npy_@type@) TO_BITS_LEN(MAGIC)[0]);
+    a = ((a & (npy_@type@) TO_BITS_LEN(MAGIC)[1])) + ((a >> 2) & (npy_@type@) TO_BITS_LEN(MAGIC)[1]);
+    a = (a + (a >> 4)) & (npy_@type@) TO_BITS_LEN(MAGIC)[2];
+    return (npy_@type@) (a * (npy_@type@) TO_BITS_LEN(MAGIC)[3]) >> ((NPY_SIZEOF_@STYPE@ - 1) * CHAR_BIT);
 }
 /**end repeat**/
 

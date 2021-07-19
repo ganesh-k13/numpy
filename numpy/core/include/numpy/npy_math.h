@@ -113,10 +113,10 @@ NPY_INLINE static float __npy_nzerof(void)
 
 /* Magic binary numbers used by popcount
  * For type T, the magic numbers are computed as follows:
- * Magic[0]: 0b101010101010101... = (T)~(T)0/3
- * Magic[1]: 0b11001100110011...  = (T)~(T)0/15  * 3
- * Magic[2]: 0b111100001111...    = (T)~(T)0/255 * 15
- * Magic[3]: 0b100000001...       = (T)~(T)0/255
+ * Magic[0]: 0b01 01 01 01 01 01... = (T)~(T)0/3
+ * Magic[1]: 0b0011 0011 0011...    = (T)~(T)0/15  * 3
+ * Magic[2]: 0b00001111 00001111... = (T)~(T)0/255 * 15
+ * Magic[3]: 0b00000001 00000001... = (T)~(T)0/255
  */
 static const npy_uint8  MAGIC8[]  = {0x55,               0x33,               0x0F,               0x01};
 static const npy_uint16 MAGIC16[] = {0x5555,             0x3333,             0x0F0F,             0x0101};

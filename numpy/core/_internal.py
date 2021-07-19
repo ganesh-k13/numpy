@@ -78,6 +78,7 @@ def _usefields(adict, align):
                   "offsets": offsets,
                   "titles": titles}, align)
 
+
 _INT_SHIFT = 30
 _MASK = (2 ** _INT_SHIFT)
 
@@ -89,7 +90,7 @@ def _get_ob_digit_array(num):
     num_list = []
     while t != 0:
         # Get remainder from division
-        small_int = t % _MASK  # more efficient bitwise analogue: (t & (MASK-1))
+        small_int = t % _MASK
         num_list.append(small_int)
 
         # Get integral part of the division (floor division)
@@ -816,9 +817,10 @@ def _popcount64(a):
 
     # Refer to npy_math_internal.h.src for more details.
     a = abs(a)
-    a -= ((a >> 1) & 0x5555555555555555)
+    a = a - ((a >> 1) & 0x5555555555555555)
     a = (a & 0x3333333333333333) + (a >> 2 & 0x3333333333333333)
-    return (((a + (a >> 4)) & 0xf0f0f0f0f0f0f0f) * 0x101010101010101 >> 56) & 0xff
+    a = (a + (a >> 4)) & 0xf0f0f0f0f0f0f0f
+    return (a * 0x101010101010101 >> 56) & 0xff
 
 def _bit_count(a):
     """ Computes the number of 1-bits in a (Python Integer) """
