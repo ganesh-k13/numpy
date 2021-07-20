@@ -1875,10 +1875,13 @@ class TestBitwiseUFuncs:
             num = 2**i - 1
             msg = f"bit_count for {num}"
             assert i == np.bit_count(input_dtype(num)), msg
+            if np.issubdtype(
+                    input_dtype, np.signedinteger) or input_dtype == np.object_:
+                assert i == np.bit_count(input_dtype(-num)), msg
 
-        a = np.array([2**i-1 for i in range(1, bitsize)], dtype = input_dtype)
+        a = np.array([2**i-1 for i in range(1, bitsize)], dtype=input_dtype)
         bit_count_a = np.bit_count(a)
-        expected = np.arange(1, bitsize, dtype = input_dtype)
+        expected = np.arange(1, bitsize, dtype=input_dtype)
 
         msg = f"array bit_count for {input_dtype}"
         assert all(bit_count_a == expected), msg
