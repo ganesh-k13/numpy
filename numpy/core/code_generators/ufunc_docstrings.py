@@ -4259,9 +4259,10 @@ add_newdoc('numpy.core.umath', 'bit_count',
 
     Examples
     --------
-    >>> np.bit_count(np.uint64(1023))
+    >>> np.bit_count(1023)
     10
-    >>> np.bit_count(np.arange(10, dtype=np.uint32))
-    array([0, 1, 1, 2, 1, 2, 2, 3, 1, 2], dtype=uint32)
+    >>> a = np.array([2**i - 1 for i in range(16)])
+    >>> np.bit_count(a)
+    array([ 0,  1,  2,  3,  4,  5,  6,  7,  8,  9, 10, 11, 12, 13, 14, 15])
 
     """)
