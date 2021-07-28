@@ -2883,6 +2883,17 @@ class ndarray(_ArrayOrScalarCommon, Generic[_ShapeType, _DType_co]):
     @overload
     def __ior__(self: NDArray[_ScalarType], other: _RecursiveSequence) -> NDArray[_ScalarType]: ...
 
+    def bit_count(
+        self,
+        out: None | NDArray[Any] = ...,
+        *,
+        where: _ArrayLikeBool_co = ...,
+        casting: _CastingKind = ...,
+        order: _OrderKACF = ...,
+        dtype: DTypeLike = ...,
+        subok: bool = ...,
+    ) -> NDArray[Any]: ...
+
     # Keep `dtype` at the bottom to avoid name conflicts with `np.dtype`
     @property
     def dtype(self) -> _DType_co: ...
@@ -3026,6 +3037,17 @@ class generic(_ArrayOrScalarCommon):
     def reshape(
         self: _ScalarType, *shape: SupportsIndex, order: _OrderACF = ...
     ) -> ndarray[Any, dtype[_ScalarType]]: ...
+
+    def bit_count(
+        self,
+        out: None | NDArray[Any] = ...,
+        *,
+        where: _ArrayLikeBool_co = ...,
+        casting: _CastingKind = ...,
+        order: _OrderKACF = ...,
+        dtype: DTypeLike = ...,
+        subok: bool = ...,
+    ) -> Any: ...
 
     def squeeze(
         self: _ScalarType, axis: Union[L[0], Tuple[()]] = ...
