@@ -269,34 +269,17 @@ npy_ObjectClip(PyObject *arr, PyObject *min, PyObject *max) {
 
 static PyObject *
 npy_ObjectPopCount(PyObject *obj) {
-    PyObject *result;
+    PyObject *result = NULL;
 
     /* Try to use inbuilt popcount if available */
-    {
-        static PyObject *builtin_popcount_func = NULL;
+    static PyObject *builtin_popcount_func = NULL;
+    builtin_popcount_func = PyObject_GetAttrString(obj, "bit_count");
 
-        builtin_popcount_func = PyObject_GetAttrString(obj, "bit_count");
-        if (builtin_popcount_func != NULL) {
-            result = PyObject_CallFunction(builtin_popcount_func, NULL);
-            return result;
-        }
-        /* silence errors, and fall back on pure-python `bit_count` */
-        PyErr_Clear();
+    if (builtin_popcount_func != NULL) {
+        result = PyObject_CallFunction(builtin_popcount_func, NULL);
     }
 
-    /* Otherwise, use our internal one, written in python */
-    {
-        static PyObject *internal_popcount_func = NULL;
-
-        npy_cache_import("numpy.core._internal", "_bit_count", &internal_popcount_func);
-        if (internal_popcount_func == NULL) {
-            return NULL;
-        }
-
-        result = PyObject_CallFunction(internal_popcount_func, "O", obj);
-
-        return result;
-    }
+    return result;
 }
 
 /*

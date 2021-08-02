@@ -79,25 +79,6 @@ def _usefields(adict, align):
                   "titles": titles}, align)
 
 
-_INT_SHIFT = 30
-_MASK = (2 ** _INT_SHIFT)
-
-# Get the internal ob_digit representation of python integer
-# Ref: https://rushter.com/blog/python-integer-implementation/
-def _get_ob_digit_array(num):
-    t = abs(num)
-
-    num_list = []
-    while t != 0:
-        # Get remainder from division
-        small_int = t % _MASK
-        num_list.append(small_int)
-
-        # Get integral part of the division (floor division)
-        t = t // _MASK  # more efficient bitwise analogue: t >>= SHIFT
-
-    return num_list
-
 # construct an array_protocol descriptor list
 #  from the fields attribute of a descriptor
 # This calls itself recursively but should eventually hit
@@ -811,25 +792,6 @@ def _gcd(a, b):
 
 def _lcm(a, b):
     return a // _gcd(a, b) * b
-
-def _popcount64(a):
-    """ Computes the number of 1-bits in a (64 bits) """
-
-    # Refer to npy_math_internal.h.src for more details.
-    a = abs(a)
-    a = a - ((a >> 1) & 0x5555555555555555)
-    a = (a & 0x3333333333333333) + (a >> 2 & 0x3333333333333333)
-    a = (a + (a >> 4)) & 0xf0f0f0f0f0f0f0f
-    return (a * 0x101010101010101 >> 56) & 0xff
-
-def _bit_count(a):
-    """ Computes the number of 1-bits in a (Python Integer) """
-    res = 0
-
-    for i in _get_ob_digit_array(a):
-        res += _popcount64(i)
-
-    return res
 
 def array_ufunc_errmsg_formatter(dummy, ufunc, method, *inputs, **kwargs):
     """ Format the error message for when __array_ufunc__ gives up. """

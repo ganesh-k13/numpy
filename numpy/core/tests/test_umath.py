@@ -1871,6 +1871,10 @@ class TestBitwiseUFuncs:
     def test_popcount(self, input_dtype_obj, bitsize):
         input_dtype = input_dtype_obj.type
 
+        # bit_count is only in-built in 3.10+
+        if sys.version_info < (3, 10) and input_dtype == np.object_:
+            pytest.skip()
+
         for i in range(1, bitsize):
             num = 2**i - 1
             msg = f"bit_count for {num}"
