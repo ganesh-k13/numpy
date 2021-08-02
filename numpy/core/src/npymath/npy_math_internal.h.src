@@ -55,6 +55,19 @@
  */
 #include "npy_math_private.h"
 
+/* Magic binary numbers used by bit_count
+ * For type T, the magic numbers are computed as follows:
+ * Magic[0]: 01 01 01 01 01 01... = (T)~(T)0/3
+ * Magic[1]: 0011 0011 0011...    = (T)~(T)0/15  * 3
+ * Magic[2]: 00001111 00001111... = (T)~(T)0/255 * 15
+ * Magic[3]: 00000001 00000001... = (T)~(T)0/255
+ */
+static const npy_uint8  MAGIC8[]  = {0x55,               0x33,               0x0F,               0x01};
+static const npy_uint16 MAGIC16[] = {0x5555,             0x3333,             0x0F0F,             0x0101};
+static const npy_uint32 MAGIC32[] = {0x55555555,         0x33333333,         0x0F0F0F0F,         0x01010101};
+static const npy_uint64 MAGIC64[] = {0x5555555555555555, 0x3333333333333333, 0x0F0F0F0F0F0F0F0F, 0x0101010101010101};
+
+
 /*
  *****************************************************************************
  **                     BASIC MATH FUNCTIONS                                **
@@ -821,8 +834,7 @@ npy_popcountu@c@(npy_@type@ a)
     return __builtin_popcount@c@(a);
 #elif defined(_MSC_VER) && NPY_BITSOF_@STYPE@ >= 16
     return TO_BITS_LEN(__popcnt)(a);
-#endif
-
+#else
     /* Counting bits set, in parallel
      * Based on: http://graphics.stanford.edu/~seander/bithacks.html#CountBitsSetParallel
      *
@@ -836,6 +848,7 @@ npy_popcountu@c@(npy_@type@ a)
     a = ((a & (npy_@type@) TO_BITS_LEN(MAGIC)[1])) + ((a >> 2) & (npy_@type@) TO_BITS_LEN(MAGIC)[1]);
     a = (a + (a >> 4)) & (npy_@type@) TO_BITS_LEN(MAGIC)[2];
     return (npy_@type@) (a * (npy_@type@) TO_BITS_LEN(MAGIC)[3]) >> ((NPY_SIZEOF_@STYPE@ - 1) * CHAR_BIT);
+#endif
 }
 /**end repeat**/
 
