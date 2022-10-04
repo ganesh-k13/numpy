@@ -1014,6 +1014,42 @@ add_newdoc('numpy.core.umath', 'rad2deg',
 
     """)
 
+add_newdoc('numpy.core.umath', 'cart2pol',
+    """
+    Convert angles from radians to degrees.
+
+    Parameters
+    ----------
+    x : array_like
+        Angle in radians.
+    x : array_like
+        Angle in radians.
+    $PARAMS
+
+    Returns
+    -------
+    y : ndarray
+        The corresponding angle in degrees.
+        $OUT_SCALAR_1
+
+    See Also
+    --------
+    deg2rad : Convert angles from degrees to radians.
+    unwrap : Remove large jumps in angle by wrapping.
+
+    Notes
+    -----
+    .. versionadded:: 1.3.0
+
+    rad2deg(x) is ``180 * x / pi``.
+
+    Examples
+    --------
+    >>> np.rad2deg(np.pi/2)
+    90.0
+
+    """)
+
 add_newdoc('numpy.core.umath', 'heaviside',
     """
     Compute the Heaviside step function.
@@ -2021,7 +2057,7 @@ add_newdoc('numpy.core.umath', 'log',
     has a branch cut `[-inf, 0]` and is continuous from above on it. `log`
     handles the floating-point negative zero as an infinitesimal negative
     number, conforming to the C99 standard.
-    
+
     In the cases where the input has a negative real part and a very small
     negative complex part (approaching 0), the result is so close to `-pi`
     that it evaluates to exactly `-pi`.

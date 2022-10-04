@@ -22,6 +22,7 @@ umr_sum = um.add.reduce
 umr_prod = um.multiply.reduce
 umr_any = um.logical_or.reduce
 umr_all = um.logical_and.reduce
+umr_cart2pol = um.cart2pol
 
 # Complex types to -> (2,)float view for fast-path computation in _var()
 _complex_to_float = {
@@ -295,3 +296,8 @@ def _dump(self, file, protocol=2):
 
 def _dumps(self, protocol=2):
     return pickle.dumps(self, protocol=protocol)
+
+def _cart2pol(a, b, out=None, *, where=True, casting='same_kind',
+        order='K', dtype=None, subok=True):
+    return umr_cart2pol(a, b, out, where=where, casting=casting,
+            order=order, dtype=dtype, subok=subok)

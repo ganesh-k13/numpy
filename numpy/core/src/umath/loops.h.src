@@ -426,6 +426,9 @@ NPY_NO_EXPORT void
 @TYPE@_divmod(char **args, npy_intp const *dimensions, npy_intp const *steps, void *NPY_UNUSED(func));
 
 NPY_NO_EXPORT void
+@TYPE@_cart2pol(char **args, npy_intp const *dimensions, npy_intp const *steps, void *NPY_UNUSED(func));
+
+NPY_NO_EXPORT void
 @TYPE@_square(char **args, npy_intp const *dimensions, npy_intp const *steps, void *NPY_UNUSED(data));
 
 NPY_NO_EXPORT void
@@ -759,7 +762,7 @@ PyUFunc_OOO_O(char **args, npy_intp const *dimensions, npy_intp const *steps, vo
   * #TYPE = FLOAT, DOUBLE, LONGDOUBLE#
   */
 /**begin repeat1
- * #kind = maximum, minimum, fmax, fmin#
+ * #kind = maximum, minimum, fmax, fmin, cart2pol#
  */
  NPY_CPU_DISPATCH_DECLARE(NPY_NO_EXPORT void @TYPE@_@kind@,
    (char **args, npy_intp const *dimensions, npy_intp const *steps, void *NPY_UNUSED(data)))

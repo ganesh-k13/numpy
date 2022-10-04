@@ -21,6 +21,7 @@ Trigonometric functions
    unwrap
    deg2rad
    rad2deg
+   cart2pol
 
 Hyperbolic functions
 --------------------

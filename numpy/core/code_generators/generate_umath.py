@@ -629,6 +629,21 @@ defdict = {
           None,
           TD(fltsP, f='rad2deg', astype={'e': 'f'}),
           ),
+'cart2pol':
+    Ufunc(2, 2, None,
+          docstrings.get('numpy.core.umath.cart2pol'),
+          None,
+          TD(fltsP, f='cart2pol', astype={'e': 'f'}),
+          ),
+# 'divmod':
+#     Ufunc(2, 2, None,
+#           docstrings.get('numpy.core.umath.divmod'),
+#           'PyUFunc_DivmodTypeResolver',
+#           TD(ints, dispatch=[('loops_modulo', ints)]),
+#           TD(flts),
+#           [TypeDescription('m', FullTypeDescr, 'mm', 'qm')],
+#           # TD(O, f='PyNumber_Divmod'),  # gh-9730
+#           ),
 'radians':
     Ufunc(1, 1, None,
           docstrings.get('numpy.core.umath.radians'),
@@ -1023,6 +1038,17 @@ arity_lookup = {
         'G': 'GG_G',
         'O': 'OO_O',
         'P': 'OO_O_method',
+    },
+    (2, 2): {
+        'e': 'ee_ee',
+        'f': 'ff_ff',
+        'd': 'dd_dd',
+        'g': 'gg_gg',
+        'F': 'FF_FF',
+        'D': 'DD_DD',
+        'G': 'GG_GG',
+        'O': 'OO_OO',
+        'P': 'OO_OO_method',
     },
     (3, 1): {
         'O': 'OOO_O',

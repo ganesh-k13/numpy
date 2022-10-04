@@ -1566,7 +1566,7 @@ gentype_byteswap(PyObject *self, PyObject *args, PyObject *kwds)
  *         std, var, sum, cumsum, prod, cumprod, compress, sort, argsort,
  *         round, argmax, argmin, max, min, ptp, any, all, astype, resize,
  *         reshape, choose, tostring, tobytes, copy, searchsorted, view,
- *         flatten, ravel, squeeze#
+ *         flatten, ravel, squeeze, cart2pol#
  */
 static PyObject *
 gentype_@name@(PyObject *self, PyObject *args, PyObject *kwds)
@@ -2213,6 +2213,9 @@ static PyMethodDef gentype_methods[] = {
         METH_VARARGS | METH_KEYWORDS, NULL},
     {"round",
         (PyCFunction)gentype_round,
+        METH_VARARGS | METH_KEYWORDS, NULL},
+    {"cart2pol",
+        (PyCFunction)gentype_cart2pol,
         METH_VARARGS | METH_KEYWORDS, NULL},
     /* For the format function */
     {"__format__",
