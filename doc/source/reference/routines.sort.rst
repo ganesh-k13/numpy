@@ -26,6 +26,8 @@ Searching
    nanargmax
    argmin
    nanargmin
+   argfirst
+   first
    argwhere
    nonzero
    flatnonzero

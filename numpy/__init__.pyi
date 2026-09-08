@@ -549,6 +549,8 @@ from numpy.lib._function_base_impl import (
     interp,
     quantile,
     vectorize,
+    argfirst,
+    first,
 )
 
 from numpy.lib._histograms_impl import (
@@ -769,7 +771,7 @@ __all__ = [
     "vectorize", "asarray_chkfinite", "average", "bincount", "digitize", "cov",
     "corrcoef", "median", "sinc", "hamming", "hanning", "bartlett", "blackman",
     "kaiser", "trapezoid", "i0", "meshgrid", "delete", "insert", "append",
-    "interp", "quantile",
+    "interp", "quantile", "argfirst", "first",
     # lib._twodim_base_impl.__all__
     "diag", "diagflat", "eye", "fliplr", "flipud", "tri", "triu", "tril", "vander",
     "histogram2d", "mask_indices", "tril_indices", "tril_indices_from", "triu_indices",

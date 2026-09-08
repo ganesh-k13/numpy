@@ -600,6 +600,51 @@ class TestSelect:
         select(conditions, choices)
 
 
+class TestArgfirst:
+    def test_nonzero_default(self):
+        assert np.argfirst(np.array([0, 0, 3, 0, 5])) == 2
+        assert np.argfirst(np.zeros(5)) == -1
+
+    def test_operators(self):
+        a = np.array([0, 0, 3, 0, 5])
+        assert np.argfirst(a, '>=', 5) == 4
+        assert np.argfirst(a, '==', 0) == 0
+        assert np.argfirst(a, '>', 10) == -1
+        assert np.argfirst(a, '<', 0) == -1
+
+    def test_short_circuit(self):
+        # Only the first match is inspected, so a match before an invalid
+        # region is still found without touching it.
+        a = np.zeros(10000)
+        a[1] = 1
+        assert np.argfirst(a) == 1
+
+    def test_boolean(self):
+        assert np.argfirst(np.array([False, False, True, True])) == 2
+
+    def test_axis(self):
+        m = np.array([[0, 0, 2], [1, 0, 0], [0, 0, 0]])
+        assert_array_equal(np.argfirst(m, axis=1), [2, 0, -1])
+        assert_array_equal(np.argfirst(m, axis=0), [1, -1, 0])
+        assert np.argfirst(m) == 2
+
+    def test_invalid_op(self):
+        assert_raises(ValueError, np.argfirst, np.arange(3), 'bad')
+
+
+class TestFirst:
+    def test_basic(self):
+        a = np.array([0, 0, 3, 0, 5])
+        assert np.first(a) == 3
+        assert np.first(a, '>=', 5) == 5
+        assert np.first(a, '>', 10) is None
+        assert np.first(a, '>', 10, otherwise=-1) == -1
+
+    def test_axis(self):
+        m = np.array([[0, 0, 2], [1, 0, 0], [0, 0, 0]])
+        assert_array_equal(np.first(m, axis=1, otherwise=-9), [2, 1, -9])
+
+
 class TestInsert:
 
     def test_basic(self):

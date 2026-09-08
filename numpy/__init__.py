@@ -471,6 +471,7 @@ else:
     from .lib._function_base_impl import (
         angle,
         append,
+        argfirst,
         asarray_chkfinite,
         average,
         bartlett,
@@ -483,6 +484,7 @@ else:
         diff,
         digitize,
         extract,
+        first,
         flip,
         gradient,
         hamming,

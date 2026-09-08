@@ -9,7 +9,15 @@ import numpy as np
 import numpy._core.numeric as _nx
 from numpy._core import overrides, transpose
 from numpy._core._multiarray_umath import _array_converter
-from numpy._core.fromnumeric import any, mean, nonzero, partition, ravel, sum
+from numpy._core.fromnumeric import (
+    any,
+    argmax,
+    mean,
+    nonzero,
+    partition,
+    ravel,
+    sum,
+)
 from numpy._core.multiarray import (
     _monotonicity,
     _place,
@@ -72,8 +80,18 @@ __all__ = [
     'median', 'sinc', 'hamming', 'hanning', 'bartlett',
     'blackman', 'kaiser', 'trapezoid', 'i0',
     'meshgrid', 'delete', 'insert', 'append', 'interp',
-    'quantile'
+    'quantile', 'argfirst', 'first'
     ]
+
+# Comparison operators accepted by ``argfirst`` and ``first``.
+_COMPARISON_OPS = {
+    '==': _nx.equal,
+    '!=': not_equal,
+    '>': _nx.greater,
+    '>=': _nx.greater_equal,
+    '<': _nx.less,
+    '<=': less_equal,
+}
 
 # _QuantileMethods is a dictionary listing all the supported methods to
 # compute quantile/percentile.
@@ -927,6 +945,145 @@ def select(condlist, choicelist, default=0):
         np.copyto(result, choice, where=cond)
 
     return result
+
+
+def _resolve_comparison(op):
+    try:
+        return _COMPARISON_OPS[op]
+    except (KeyError, TypeError):
+        raise ValueError(
+            f"invalid comparison operator {op!r}; must be one of "
+            f"{sorted(_COMPARISON_OPS)}"
+        ) from None
+
+
+def _argfirst_dispatcher(a, op=None, target=None, *, axis=None):
+    return (a,)
+
+
+@array_function_dispatch(_argfirst_dispatcher)
+def argfirst(a, op='!=', target=0, *, axis=None):
+    """
+    Return the index of the first element satisfying ``a <op> target``.
+
+    Unlike ``nonzero(a)[0][0]``, the search stops as soon as a matching
+    element is found, so the whole array need not be examined.
+
+    Parameters
+    ----------
+    a : array_like
+        Input array.
+    op : {'==', '!=', '>', '>=', '<', '<='}, optional
+        Comparison to test each element of `a` against `target`. The
+        default, ``'!='``, finds the first nonzero element.
+    target : scalar, optional
+        Value compared against. Default is 0.
+    axis : int, optional
+        Axis along which to search. By default the flattened array is
+        used.
+
+    Returns
+    -------
+    index : intp or ndarray of intp
+        Index of the first match. If `axis` is None a scalar is returned,
+        otherwise an array with `a`'s shape but `axis` removed. ``-1`` marks
+        the entries where no element matches.
+
+    See Also
+    --------
+    first, nonzero, flatnonzero, argmax
+
+    Examples
+    --------
+    >>> import numpy as np
+    >>> a = np.array([0, 0, 3, 0, 5])
+    >>> np.argfirst(a)
+    2
+    >>> np.argfirst(a, '>=', 5)
+    4
+    >>> np.argfirst(a, '>', 10)
+    -1
+    >>> np.argfirst(np.array([[0, 0, 2], [1, 0, 0]]), axis=1)
+    array([2, 0])
+    """
+    a = asanyarray(a)
+    cmp = _resolve_comparison(op)
+
+    if axis is None:
+        flat = a.ravel()
+        n = flat.size
+        chunk = 4096
+        start = 0
+        while start < n:
+            hits = nonzero(cmp(flat[start:start + chunk], target))[0]
+            if hits.size:
+                return intp(start + hits[0])
+            start += chunk
+        return intp(-1)
+
+    axis = normalize_axis_index(axis, a.ndim)
+    mask = cmp(a, target)
+    idx = argmax(mask, axis=axis)
+    return where(any(mask, axis=axis), idx, -1)
+
+
+def _first_dispatcher(a, op=None, target=None, otherwise=None, *, axis=None):
+    return (a,)
+
+
+@array_function_dispatch(_first_dispatcher)
+def first(a, op='!=', target=0, otherwise=None, *, axis=None):
+    """
+    Return the first element satisfying ``a <op> target``.
+
+    This is the value-returning companion of `argfirst`; the search
+    short-circuits on the first match.
+
+    Parameters
+    ----------
+    a : array_like
+        Input array.
+    op : {'==', '!=', '>', '>=', '<', '<='}, optional
+        Comparison to test each element of `a` against `target`. The
+        default, ``'!='``, finds the first nonzero element.
+    target : scalar, optional
+        Value compared against. Default is 0.
+    otherwise : scalar, optional
+        Value returned for entries with no match. Default is None.
+    axis : int, optional
+        Axis along which to search. By default the flattened array is
+        used.
+
+    Returns
+    -------
+    value : scalar or ndarray
+        First matching element, or `otherwise` where no element matches.
+
+    See Also
+    --------
+    argfirst, extract, nonzero
+
+    Examples
+    --------
+    >>> import numpy as np
+    >>> a = np.array([0, 0, 3, 0, 5])
+    >>> np.first(a)
+    3
+    >>> np.first(a, '>', 10, otherwise=-1)
+    -1
+    """
+    a = asanyarray(a)
+    idx = argfirst(a, op, target, axis=axis)
+
+    if axis is None:
+        return otherwise if idx == -1 else a.ravel()[idx]
+
+    axis = normalize_axis_index(axis, a.ndim)
+    found = idx != -1
+    values = np.take_along_axis(
+        a, np.expand_dims(where(found, idx, 0), axis), axis
+    ).squeeze(axis)
+    return where(found, values, otherwise)
 
 
 def _copy_dispatcher(a, order=None, subok=None):

@@ -77,7 +77,11 @@ __all__ = [
     "append",
     "interp",
     "quantile",
+    "argfirst",
+    "first",
 ]
+
+type _ComparisonOp = L["==", "!=", ">", ">=", "<", "<="]
 
 type _ArrayLike1D[ScalarT: np.generic] = _SupportsArray[np.dtype[ScalarT]] | Sequence[ScalarT]
 
@@ -541,6 +545,23 @@ def select(
     choicelist: Sequence[ArrayLike],
     default: ArrayLike = 0,
 ) -> np.ndarray: ...
+
+@overload
+def argfirst(
+    a: ArrayLike, op: _ComparisonOp = "!=", target: ArrayLike = 0, *, axis: None = None
+) -> np.intp: ...
+@overload
+def argfirst(
+    a: ArrayLike, op: _ComparisonOp = "!=", target: ArrayLike = 0, *, axis: SupportsIndex
+) -> Incomplete: ...
+def first(
+    a: ArrayLike,
+    op: _ComparisonOp = "!=",
+    target: ArrayLike = 0,
+    otherwise: Incomplete = None,
+    *,
+    axis: SupportsIndex | None = None,
+) -> Incomplete: ...
 
 # keep roughly in sync with `ma.core.copy`
 @overload  # known array, subok=True (positional)

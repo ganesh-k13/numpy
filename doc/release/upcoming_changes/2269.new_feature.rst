@@ -1,0 +1,11 @@
+``np.argfirst`` and ``np.first`` for short-circuiting searches
+--------------------------------------------------------------
+
+``np.argfirst`` returns the index of the first element satisfying a
+comparison against a target value (``'!='`` with a target of ``0`` by
+default, i.e. the first nonzero element), and ``np.first`` returns the
+element itself. Unlike ``np.nonzero(a)[0][0]``, the search stops as soon
+as a match is found, so the whole array need not be examined. Both accept
+the comparisons ``'=='``, ``'!='``, ``'>'``, ``'>='``, ``'<'`` and
+``'<='`` and an optional ``axis``; ``-1`` (``argfirst``) or ``otherwise``
+(``first``) marks entries with no match.
